@@ -31,7 +31,6 @@ uint8_t spi_return;
 // Send the pixel data to the led strip.
 void showPixels(void) {
   uint8_t i;
-  uint8_t *ptr = pixels;
   uint16_t n = NUMPIXELS; 
   
   // 4 bytes of 0 as the start frame
@@ -46,7 +45,7 @@ void showPixels(void) {
     spi_return = SPI.transfer(0xFF);
     for (i = 0; i < 3; i++) {
       // Write R,G,B
-      spi_return = SPI.transfer(*ptr++);
+      spi_return = SPI.transfer(pixels[n + i]);
     }
   } while(--n);
   
@@ -69,6 +68,7 @@ void setPixelColor (uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
 void setPixels() {
   uint8_t state = 0;
   for (uint8_t i = NUMPIXELS; i > 0; i--) {
+    //setPixelColor(i, 110, 100, 110);
     state = bitRead(lfsr, i); Serial.print(state);
     if (state) {
       setPixelColor (i, 0, 100, 0);
@@ -112,7 +112,7 @@ void setup() {
 }
 
 void loop() {
-  //showPixels();
+  showPixels();
   shift();
   setPixels();
   
