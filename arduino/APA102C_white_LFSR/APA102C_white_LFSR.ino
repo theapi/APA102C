@@ -11,7 +11,7 @@
 #define INDEX_BLUE 2
 
 #define NUMPIXELS 240
-#define NUMPIXEL_BYTES NUMPIXELS * 1
+//#define NUMPIXEL_BYTES NUMPIXELS * 1
 
 #define LFSR_TAP_1 0
 #define LFSR_TAP_2 2
@@ -25,7 +25,7 @@ uint64_t lfsr = (uint64_t) 1 << NUMPIXELS - 1;
 
 
 // LED RGB values (3 bytes each)
-uint8_t pixels[NUMPIXEL_BYTES];
+uint8_t pixels[NUMPIXELS][3];
 
 // Junk from the spi response; 
 uint8_t spi_return;
@@ -45,10 +45,13 @@ void showPixels(void) {
     // For each pixel...
     // Pixel start, 3 bits of 1, then 5 bits of brightness.
     spi_return = SPI.transfer(0xFF);
-    for (i = 0; i < 3; i++) {
-      // Write R,G,B
-      spi_return = SPI.transfer(pixels[n]);
-    }
+    spi_return = SPI.transfer(pixels[n][0]);
+    spi_return = SPI.transfer(pixels[n][1]);
+    spi_return = SPI.transfer(pixels[n][2]);
+//    for (i = 0; i < 3; i++) {
+//      // Write R,G,B
+//      spi_return = SPI.transfer(pixels[n]);
+//    }
   }
 
   // End frame
@@ -57,19 +60,21 @@ void showPixels(void) {
   }
 }
 
-// Set pixel color, separate R,G,B values (0-255 each)
-void setPixelColor (uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
-  if (n < NUMPIXELS) {
-    uint16_t i = n * 3;
-    pixels[i + INDEX_RED] = r;
-    pixels[i + INDEX_GREEN] = g;
-    pixels[i + INDEX_BLUE] = b;
-  }
-}
+//// Set pixel color, separate R,G,B values (0-255 each)
+//void setPixelColor (uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
+//  if (n < NUMPIXELS) {
+//    uint16_t i = n * 3;
+//    pixels[i + INDEX_RED] = r;
+//    pixels[i + INDEX_GREEN] = g;
+//    pixels[i + INDEX_BLUE] = b;
+//  }
+//}
 
-void setPixel(uint16_t n, uint8_t w) {
+void setPixel(uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
   if (n < NUMPIXELS) {
-    pixels[n] = w;
+    pixels[n][0] = r;
+    pixels[n][1] = g;
+    pixels[n][2] = b;
   }
 }
 
@@ -83,12 +88,12 @@ void setPixels() {
     //state = (lfsr >> i) & 1;
     Serial.print(state);
     if (state) {
-      setPixel(i, 100);
-      //setPixelColor (i, 0, 100, 0);
+      //setPixel(i, 100);
+      setPixel(i, 0, 100, 0);
     }
     else {
-      setPixel(i, 0);
-      //setPixelColor (i, 0, 0, 0);
+      //setPixel(i, 0);
+      setPixel(i, 0, 0, 0);
     }
   }
   Serial.println();
@@ -118,7 +123,7 @@ void setup() {
   Serial.println();
   
   // Fill the pixel data with zeros
-  memset(pixels, 0 , NUMPIXEL_BYTES);
+  memset(pixels, 0 , NUMPIXELS);
   SPI.begin();
   SPI.beginTransaction(SPISettings(SPI_FREQ, SPI_ORDER, SPI_MODE));
   showPixels();
@@ -127,12 +132,13 @@ void setup() {
 int head  = 0, tail = -1; // Index of first 'on' and 'off' pixels
 
 void loop() {
-  //uint16_t n = 0;
-  //setPixelColor (n, 100, 10, 0);
-  //setPixel(n, 100);
+//  uint16_t n = 1;
+//  setPixel(n, 10, 10, 10);
+//  showPixels();
+//  delay(250);
 
-  setPixel(head, 100); // 'On' pixel at head
-  setPixel(tail, 0);     // 'Off' pixel at tail
+  setPixel(head, 200, 200, 200); // 'On' pixel at head
+  setPixel(tail, 0, 0, 0);     // 'Off' pixel at tail
   showPixels();
   delay(20);
 
