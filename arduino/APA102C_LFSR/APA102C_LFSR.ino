@@ -90,11 +90,11 @@ void setPixels() {
 
 void shift() {
   // Four taps, exclusive ORed together.
-  uint8_t bit = (
-    (lfsr >> LFSR_TAP_1) ^ (lfsr >> LFSR_TAP_2) ^ (lfsr >> LFSR_TAP_3) ^ (lfsr >> LFSR_TAP_4) 
-  ) & 1;
+//  uint8_t bit = (
+//    (lfsr >> LFSR_TAP_1) ^ (lfsr >> LFSR_TAP_2) ^ (lfsr >> LFSR_TAP_3) ^ (lfsr >> LFSR_TAP_4) 
+//  ) & 1;
 
-  //uint8_t bit = bitRead(lfsr, 0);
+  uint8_t bit = bitRead(lfsr, 0);
 
   // Not using bitWrite() as it cannot use 64bit 
   if (bit) {
