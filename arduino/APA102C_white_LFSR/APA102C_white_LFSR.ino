@@ -12,7 +12,7 @@
 
 #define NUMPIXELS 240
 //#define NUMPIXEL_BYTES NUMPIXELS * 1
-
+#define LFSR_SIZE 60
 #define LFSR_TAP_1 0
 #define LFSR_TAP_2 2
 #define LFSR_TAP_3 3
@@ -20,7 +20,7 @@
 
 // 64 bit linear feedback shift register.
 // Seeded with 1, as it shifts right;
-uint64_t lfsr = (uint64_t) 1 << NUMPIXELS - 1;
+uint64_t lfsr = (uint64_t) 1 << LFSR_SIZE - 1;
 //uint64_t lfsr = 1;
 
 
@@ -81,40 +81,51 @@ void setPixel(uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
 void setPixels() {
   uint8_t state = 0;
   uint8_t bit = 0;
+  uint16_t n = 0;
   for (uint16_t i = 0; i < NUMPIXELS; i++) {
+
+    if (n >= LFSR_SIZE) {
+      n = 0;
+    }
+    
     // Set the first pixel to be the MSB of lfsr.
-    bit = (NUMPIXELS - 1) - i;
+    bit = (LFSR_SIZE - 1) - n;
+
+    n++;
+    
     state = bitRead(lfsr, bit); 
     //state = (lfsr >> i) & 1;
-    Serial.print(state);
+    //Serial.print(state);
     if (state) {
-      //setPixel(i, 100);
-      setPixel(i, 0, 100, 0);
+      setPixel(i, 0, 75, 0);
     }
     else {
-      //setPixel(i, 0);
       setPixel(i, 0, 0, 0);
     }
   }
-  Serial.println();
+  //Serial.println();
 }
 
 void shift() {
   // Four taps, exclusive ORed together.
-//  uint8_t bit = (
-//    (lfsr >> LFSR_TAP_1) ^ (lfsr >> LFSR_TAP_2) ^ (lfsr >> LFSR_TAP_3) ^ (lfsr >> LFSR_TAP_4) 
-//  ) & 1;
+  uint8_t bit = (
+    (lfsr >> LFSR_TAP_1) ^ (lfsr >> LFSR_TAP_2) ^ (lfsr >> LFSR_TAP_3) ^ (lfsr >> LFSR_TAP_4) 
+  ) & 1;
 
-  uint8_t bit = bitRead(lfsr, 0);
+  //uint8_t bit = bitRead(lfsr, 0);
 
+  // Shift right, removing the least significant bit.
+  lfsr = lfsr >> 1;
+
+  // Add the new bit to the start of the register.
   // Not using bitWrite() as it cannot use 64bit 
   if (bit) {
-    lfsr |= (uint64_t) 1 << NUMPIXELS;
+    lfsr |= (uint64_t) 1 << (LFSR_SIZE - 1);
   }
   else {
-    lfsr &= ~((uint64_t) 1 << NUMPIXELS);
+    lfsr &= ~((uint64_t) 1 << (LFSR_SIZE - 1));
   }
-  lfsr = lfsr >> 1;
+  
 }
 
 void setup() {
@@ -137,22 +148,22 @@ void loop() {
 //  showPixels();
 //  delay(250);
 
-  setPixel(head, 200, 200, 200); // 'On' pixel at head
-  setPixel(tail, 0, 0, 0);     // 'Off' pixel at tail
-  showPixels();
-  delay(20);
-
-  if (++head >= NUMPIXELS) {         // Increment head index.  Off end of strip?
-    head = 0;                       //  Yes, reset head index to start
-  }
-  if (++tail >= NUMPIXELS) {
-    tail = 0; // Increment, reset tail index
-  }
-
-//  setPixels();
+//  setPixel(head, 200, 200, 200); // 'On' pixel at head
+//  setPixel(tail, 0, 0, 0);     // 'Off' pixel at tail
 //  showPixels();
-//  shift();
-//  delay(250);
+//  delay(20);
+//
+//  if (++head >= NUMPIXELS) {         // Increment head index.  Off end of strip?
+//    head = 0;                       //  Yes, reset head index to start
+//  }
+//  if (++tail >= NUMPIXELS) {
+//    tail = 0; // Increment, reset tail index
+//  }
+
+  setPixels();
+  showPixels();
+  shift();
+  delay(20);
   
 }
 
