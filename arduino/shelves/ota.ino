@@ -6,6 +6,9 @@ void otaSetup() {
   ArduinoOTA.onStart([]() {
     // Led ON
     digitalWrite(DEBUG_LED, LOW);
+    // Turn off the strip
+    stripSetAllPixels(0);
+    stripShow();
   });
   ArduinoOTA.onEnd([]() {
     // Led Off

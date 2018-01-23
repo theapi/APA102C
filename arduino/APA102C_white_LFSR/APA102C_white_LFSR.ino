@@ -10,7 +10,7 @@
 #define INDEX_GREEN 1
 #define INDEX_BLUE 2
 
-#define NUMPIXELS 240
+#define NUMPIXELS 48
 //#define NUMPIXEL_BYTES NUMPIXELS * 1
 #define LFSR_SIZE 60
 #define LFSR_TAP_1 0
@@ -97,7 +97,7 @@ void setPixels() {
     //state = (lfsr >> i) & 1;
     //Serial.print(state);
     if (state) {
-      setPixel(i, 0, 75, 0);
+      setPixel(i, 75, 75, 75);
     }
     else {
       setPixel(i, 0, 0, 0);

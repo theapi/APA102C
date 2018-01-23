@@ -4,6 +4,9 @@ void stripSetup() {
   memset(pixels, 0 , NUMPIXELS);
   SPI.begin();
   SPI.beginTransaction(SPISettings(SPI_FREQ, SPI_ORDER, SPI_MODE));
+
+  // Start with all on dimmly.
+  stripSetAllPixels(10);
   stripShow();
 }
 

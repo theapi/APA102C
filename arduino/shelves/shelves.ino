@@ -47,10 +47,11 @@ void setup() {
   }
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-
   
   otaSetup();
   webserverSetup();
+
+  // Brighten the strip on completion of setup.
   stripSetAllPixels(30);
   stripShow();
 }
