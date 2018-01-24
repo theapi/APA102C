@@ -4,7 +4,7 @@
  */
 
 #define NUMPIXELS 144
-
+#define STRIP_MAX_VALUE 100 // 0 - 255 (to prevent too much power while the PSU isn't good enough)
 
 #include "config.h" 
 #include <SPI.h>
@@ -12,6 +12,8 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266WiFi.h>
 #include <ArduinoOTA.h>
+#include <WebSocketsServer.h>
+#include "ws_html.h"
 
 #define SPI_FREQ 8000000L
 #define SPI_ORDER MSBFIRST
@@ -22,6 +24,7 @@ const char* password = WIFI_PWD;
 const byte DEBUG_LED = 16;
 
 ESP8266WebServer webserver(80);
+WebSocketsServer websocket = WebSocketsServer(81);
 
 // LED values (3 bytes each)
 uint8_t pixels[NUMPIXELS][3];
@@ -50,6 +53,7 @@ void setup() {
   
   otaSetup();
   webserverSetup();
+  websocketSetup();
 
   // Brighten the strip on completion of setup.
   stripSetAllPixels(30);

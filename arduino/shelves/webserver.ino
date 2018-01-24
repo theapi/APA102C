@@ -1,7 +1,13 @@
 
 void webserverSetup() {
   webserver.on("/", webserverRoot);
+  webserver.on("/ws", webserverWebsocket);
   webserver.begin();
+}
+
+void webserverWebsocket() {
+  // send ws.html
+  webserver.send(200, "text/html", ws_html);
 }
 
 void webserverRoot() {
@@ -10,8 +16,8 @@ void webserverRoot() {
     if (webserver.argName(i).indexOf('b') == 0) {
        String d = webserver.argName(i).substring(1);
        int requested_val = webserver.arg(i).toInt();
-       //int val = constrain(requested_val, 0, 762);
-       int val = constrain(requested_val, 0, 300);
+       int max = STRIP_MAX_VALUE * 3;
+       int val = constrain(requested_val, 0, max);
        set = stripSetAllPixels(val);
        stripShow();
     }
