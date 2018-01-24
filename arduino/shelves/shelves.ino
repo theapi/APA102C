@@ -3,7 +3,7 @@
  * Control the shelf lighting.
  */
 
-#define NUMPIXELS 144
+#define NUMPIXELS 152
 #define STRIP_MAX_VALUE 100 // 0 - 255 (to prevent too much power while the PSU isn't good enough)
 
 #include "config.h" 
@@ -64,5 +64,6 @@ void setup() {
 void loop() {
   ArduinoOTA.handle();
   webserver.handleClient();
+  websocket.loop();
 }
 
