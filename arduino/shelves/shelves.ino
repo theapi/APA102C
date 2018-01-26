@@ -28,7 +28,7 @@ WebSocketsServer websocket = WebSocketsServer(81);
 
 // LED values (3 bytes each)
 uint8_t pixels[NUMPIXELS][3];
-
+uint8_t brightness = 3;
 
 void setup() {
   stripSetup();
