@@ -58,13 +58,27 @@ connection.onmessage = function (e) {
   console.log('Server: ', e.data);
 };
 
+</script>
+</head>
+<body>
+<h1>LED Control</h1>
+
+<div class="slidecontainer">
+<h4>Brightness:</h4>  
+<input type="range" min="0" max="255" value="50" class="slider" id="brightness_range">
+<p>Value: <span id="brightness_value"></span></p>
+</div>
+
+
+<script>
 var slider = document.getElementById("brightness_range");
 var output = document.getElementById("brightness_value");
 output.innerHTML = slider.value;
 
 slider.oninput = function() {
-  var v = this.value;
-  output.innerHTML = v;
+  output.innerHTML = this.value;
+
+    var v = this.value;
   if (v.length < 2) {
     v = '0' + v; 
   }
@@ -74,30 +88,7 @@ slider.oninput = function() {
   connection.send(val);
 }
 
-function sendVal() {
-  var v = parseInt(document.getElementById('v').value).toString(16);   
-
-  if (v.length < 2) {
-    v = '0' + v; 
-  }
-   
-  var val = '#'+v;    
-  console.log('Send: ' + val); 
-  connection.send(val); 
-}
-
 </script>
-</head>
-<body>
-<h1>LED Control</h1>
-<div>
-Brightness: <input id="v" type="range" min="0" max="255" step="1" onchange="sendVal();" />
-</div>
-<div class="slidecontainer">
-Brightness:  <input type="range" min="0" max="255" value="50" class="slider" id="brightness_range">
-<p>Value: <span id="brightness_value"></span></p>
-</div>
-
 </body>
 </html>
 

@@ -28,10 +28,6 @@ void websocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
 
              stripSetAllPixels(val);
              stripShow();
-
-             char buffer[64];
-             snprintf(buffer, 63, "{\"brightness\":%d}", brightness);
-             websocket.broadcastTXT(buffer);
           }
           break;
     }
