@@ -13,7 +13,10 @@ void websocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
             IPAddress ip = websocket.remoteIP(num);
             
             // send message to client
-            websocket.sendTXT(num, "Connected");
+            // Respond with json
+            char buffer[64];
+            snprintf(buffer, 63, "{\"brightness\":%d}", brightness);
+            websocket.sendTXT(num, buffer);
         }
             break;
         case WStype_TEXT:
@@ -23,12 +26,8 @@ void websocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
              int max = STRIP_MAX_VALUE * 3;
              int val = constrain(v, 0, max);
 
-             uint8_t w = stripSetAllPixels(val);
+             stripSetAllPixels(val);
              stripShow();
-
-             char buffer [33];
-             itoa (w, buffer, 10);
-             websocket.broadcastTXT(buffer);
           }
           break;
     }

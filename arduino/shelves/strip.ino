@@ -46,16 +46,12 @@ void stripSetPixel(uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
   }
 }
 
-uint8_t stripSetAllPixels(int val) {
-  uint8_t w;
-
-  w = val / 3;
+void stripSetAllPixels(int val) {
+  brightness = val / 3;
   Serial.print("Got: "); Serial.print(val);
-  Serial.print(" setting: "); Serial.println(w);
+  Serial.print(" setting: "); Serial.println(brightness);
   for (uint16_t i = 0; i < NUMPIXELS; i++) {
-    stripSetPixel(i, w, w, w);
+    stripSetPixel(i, brightness, brightness, brightness);
   }
-
-  return w;
 }
 
