@@ -15,6 +15,9 @@
 #include <WebSocketsServer.h>
 #include "ws_html.h"
 
+#define PIN_ENCODER_A D2
+#define PIN_ENCODER_B D3
+
 #define SPI_FREQ 8000000L
 #define SPI_ORDER MSBFIRST
 #define SPI_MODE SPI_MODE0
@@ -28,13 +31,17 @@ WebSocketsServer websocket = WebSocketsServer(81);
 
 // LED values (3 bytes each)
 uint8_t pixels[NUMPIXELS][3];
-uint8_t brightness = 3;
+volatile uint8_t brightness = 3;
+
 
 void setup() {
-  stripSetup();
+  pinMode(PIN_ENCODER_A, INPUT_PULLUP); 
+  pinMode(PIN_ENCODER_B, INPUT_PULLUP);
   
   pinMode(DEBUG_LED, OUTPUT);
   digitalWrite(DEBUG_LED, HIGH);  // LOW = ON
+  
+  stripSetup();
   
   Serial.begin(115200);
   Serial.println();
@@ -58,6 +65,10 @@ void setup() {
   // Brighten the strip on completion of setup.
   stripSetAllPixels(30);
   stripShow();
+
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_A), encoder_ISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B), encoder_ISR, CHANGE);
+
 }
 
 
