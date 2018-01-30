@@ -15,10 +15,11 @@ void webserverRoot() {
     if (webserver.argName(i).indexOf('b') == 0) {
        String d = webserver.argName(i).substring(1);
        int requested_val = webserver.arg(i).toInt();
-       int max = STRIP_MAX_VALUE * 3;
-       int val = constrain(requested_val, 0, max);
-       stripSetAllPixels(val);
-       stripShow();
+       int val = constrain(requested_val, 0, STRIP_MAX_VALUE);
+       brightness_changed = 1;
+       brightness = val;
+       //stripSetAllPixels(val);
+       //stripShow();
     }
   }
 

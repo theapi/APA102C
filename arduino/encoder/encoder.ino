@@ -1,19 +1,11 @@
 
-volatile byte encoder_ab = 0; // The previous & current reading
+#define PIN_ENCODER_A D2
+#define PIN_ENCODER_B D3
 
-// Pin interrupt
-void encoder_ISR() {
-  int8_t direction;
-  direction = encoder_read();
-  if (direction == 1 && brightness < 255) {
-    brightness++;
-    brightness_changed = 1;
-  }
-  else if (direction == -1 && brightness > 0) {
-    brightness--;
-    brightness_changed = 1;
-  }
-}
+volatile uint8_t brightness = 3;
+volatile uint8_t brightness_changed = 0;
+volatile uint8_t encoder_ab = 0; // The previous & current reading
+
 
 /**
  * returns change in encoder state (-1,0,1) 
@@ -84,4 +76,35 @@ int8_t encoder_read()
   return ( enc_states[( encoder_ab & 0x0f )]);
 }
 
+// Pin interrupt
+void encoder_ISR() {
+  int8_t direction;
+  direction = encoder_read();
+  if (direction == 1 && brightness < 255) {
+    brightness++;
+    brightness_changed = 1;
+  }
+  else if (direction == -1 && brightness > 0) {
+    brightness--;
+    brightness_changed = 1;
+  }
+}
+
+void setup() {
+  pinMode(PIN_ENCODER_A, INPUT_PULLUP); 
+  pinMode(PIN_ENCODER_B, INPUT_PULLUP);
+
+  Serial.begin(115200);
+  Serial.println();
+
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_A), encoder_ISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B), encoder_ISR, CHANGE);
+}
+
+void loop() {
+  if (brightness_changed) {
+    brightness_changed = 0;
+    Serial.println(brightness);
+  }
+}
 
