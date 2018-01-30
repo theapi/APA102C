@@ -1,6 +1,6 @@
 
-#define PIN_ENCODER_A D2
-#define PIN_ENCODER_B D3
+#define PIN_ENCODER_A D3
+#define PIN_ENCODER_B D2
 
 volatile uint8_t brightness = 3;
 volatile uint8_t brightness_changed = 0;
@@ -68,6 +68,8 @@ int8_t encoder_read()
   // Set the two least significant bits.
   bitWrite(encoder_ab, 0, pinA);
   bitWrite(encoder_ab, 1, pinB);
+
+  //encoder_ab = (encoder_ab & 0x0f);
   
   // At this point, we have previous reading of encoder pins in bits 2,3 of ab, 
   // current readings in bits 0,1, and together they form index of (AKA pointer to) enc_states[]  
@@ -104,6 +106,9 @@ void setup() {
 void loop() {
   if (brightness_changed) {
     brightness_changed = 0;
+//    Serial.print("ab: ");
+//    Serial.print(encoder_ab, BIN);
+//    Serial.print(" brightness: ");
     Serial.println(brightness);
   }
 }

@@ -31,6 +31,7 @@ WebSocketsServer websocket = WebSocketsServer(81);
 
 // LED values (3 bytes each)
 uint8_t pixels[NUMPIXELS][3];
+
 volatile uint8_t brightness = 3;
 volatile uint8_t brightness_changed = 0;
 
