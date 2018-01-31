@@ -4,7 +4,7 @@
  */
 
 #define NUMPIXELS 152
-#define STRIP_MAX_VALUE 100 // 0 - 255 (to prevent too much power while the PSU isn't good enough)
+#define STRIP_MAX_VALUE 80 // 0 - 255 (to prevent too much power while the PSU isn't good enough)
 
 #include "config.h" 
 #include <SPI.h>
@@ -65,7 +65,7 @@ void setup() {
   websocketSetup();
 
   // Brighten the strip on completion of setup.
-  stripSetAllPixels(30);
+  stripSetAllPixels(10);
   stripShow();
 
   attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_A), encoder_ISR, CHANGE);

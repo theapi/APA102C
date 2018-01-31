@@ -14,12 +14,8 @@ void webserverRoot() {
   for (uint8_t i = 0; i < webserver.args(); i++ ) {
     if (webserver.argName(i).indexOf('b') == 0) {
        String d = webserver.argName(i).substring(1);
-       int requested_val = webserver.arg(i).toInt();
-       int val = constrain(requested_val, 0, STRIP_MAX_VALUE);
+       brightness = webserver.arg(i).toInt();
        brightness_changed = 1;
-       brightness = val;
-       //stripSetAllPixels(val);
-       //stripShow();
     }
   }
 

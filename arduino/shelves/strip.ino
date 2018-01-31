@@ -6,7 +6,7 @@ void stripSetup() {
   SPI.beginTransaction(SPISettings(SPI_FREQ, SPI_ORDER, SPI_MODE));
 
   // Start with all on dimmly.
-  stripSetAllPixels(10);
+  stripSetAllPixels(2);
   stripShow();
 }
 
@@ -50,10 +50,10 @@ void stripSetPixel(uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
  * Temporary
  */
 void stripSetAllPixels(int val) {
-  brightness = val;
+  brightness = constrain(val, 0, STRIP_MAX_VALUE);
   Serial.print(" setting: "); Serial.println(brightness);
   for (uint16_t i = 0; i < NUMPIXELS; i++) {
-    stripSetPixel(i, val, val, val);
+    stripSetPixel(i, brightness, brightness, brightness);
   }
 }
 

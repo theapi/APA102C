@@ -22,12 +22,8 @@ void websocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
         case WStype_TEXT:
           //Serial.printf("[%u]: %s\n", num, payload);
           if (payload[0] == '#') {
-             int v = strtol((const char *) &payload[1], NULL, 16);
-             int val = constrain(v, 0, STRIP_MAX_VALUE);
-             brightness_changed = 1;
-             brightness = val;
-             //stripSetAllPixels(val);
-             //stripShow();
+             brightness = strtol((const char *) &payload[1], NULL, 16);
+             brightness_changed = 1;;
           }
           break;
     }
