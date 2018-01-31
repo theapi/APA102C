@@ -1,10 +1,11 @@
 
 /**
  * Control the shelf lighting.
+ * NB: White LEDs only
  */
 
 #define NUMPIXELS 152
-#define STRIP_MAX_VALUE 80 // 0 - 255 (to prevent too much power while the PSU isn't good enough)
+#define STRIP_MAX_VALUE 300 // 0 - 768 (to prevent too much power while the PSU isn't good enough)
 
 #include "config.h" 
 #include <SPI.h>

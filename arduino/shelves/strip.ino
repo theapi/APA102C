@@ -51,9 +51,22 @@ void stripSetPixel(uint16_t n, uint8_t r, uint8_t g, uint8_t b) {
  */
 void stripSetAllPixels(int val) {
   brightness = constrain(val, 0, STRIP_MAX_VALUE);
+  int r, g, b; // all white but still 3 leds per pixel
+  r = 0;
+  g = 0;
+  b = 0;
+  if (brightness < 256) {
+    r = brightness;
+  }
+  if (r > 0 && brightness < 512) {
+    g = brightness - 256;;
+  }
+  if (g > 0 && brightness < 768) {
+    b = brightness - 512;;
+  }
   Serial.print(" setting: "); Serial.println(brightness);
   for (uint16_t i = 0; i < NUMPIXELS; i++) {
-    stripSetPixel(i, brightness, brightness, brightness);
+    stripSetPixel(i, r, g, b);
   }
 }
 
