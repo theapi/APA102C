@@ -1,9 +1,10 @@
 
 #define PIN_ENCODER_A D3
 #define PIN_ENCODER_B D2
+#define ENCODER_DENT_UNIT 4 // How many dents per unit
 
 volatile uint8_t encoder_ab = 0; // The previous & current reading
-
+volatile int8_t encoder_dents = 0; // Track the number & direction of dents 
 
 /**
  * returns change in encoder state (-1,0,1) 
@@ -80,14 +81,32 @@ int8_t encoder_read()
 void encoder_ISR() {
   int8_t direction;
   direction = encoder_read();
-  if (direction == 1 && brightness < 255) {
-    brightness++;
-    brightness_changed = 1;
+  if (direction == 1 && brightness < STRIP_MAX_VALUE) {
+    if (encoder_dents < 0) {
+      // Reset the dent counter as the direction just changed.
+      encoder_dents = 0;
+    }
+    encoder_dents++;
   }
   else if (direction == -1 && brightness > 0) {
-    brightness--;
-    brightness_changed = 1;
+    if (encoder_dents > 0) {
+      // Reset the dent counter as the direction just changed.
+      encoder_dents = 0;
+    }
+    encoder_dents--;
   }
-}
 
+  // If we've had the configured number of dents, then up the brightness.
+  // This allows for one unit of precision. 
+  if (abs(encoder_dents) == ENCODER_DENT_UNIT) {
+    if (encoder_dents > 0) {
+      brightness++;
+    } else {
+      brightness--;
+    }
+    brightness_changed = 1;
+    encoder_dents = 0;
+  }
+  
+}
 
