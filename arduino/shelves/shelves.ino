@@ -5,7 +5,7 @@
  */
 
 #define NUMPIXELS 152
-#define STRIP_MAX_VALUE 300 // 0 - 768 (to prevent too much power while the PSU isn't good enough)
+#define STRIP_MAX_VALUE 765 // about 45 watts = 9 amps at 5v
 
 #include "config.h" 
 #include <SPI.h>
@@ -33,7 +33,7 @@ WebSocketsServer websocket = WebSocketsServer(81);
 // LED values (3 bytes each)
 uint8_t pixels[NUMPIXELS][3];
 
-volatile uint8_t brightness = 3;
+volatile uint16_t brightness = 3;
 volatile uint8_t brightness_changed = 0;
 
 
@@ -42,7 +42,7 @@ void setup() {
   pinMode(PIN_ENCODER_B, INPUT_PULLUP);
   
   pinMode(DEBUG_LED, OUTPUT);
-  digitalWrite(DEBUG_LED, HIGH);  // LOW = ON
+  digitalWrite(DEBUG_LED, LOW);  // LOW = ON
   
   stripSetup();
   

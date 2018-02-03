@@ -4,15 +4,15 @@ void otaSetup() {
   ArduinoOTA.setHostname("shelves");
   
   ArduinoOTA.onStart([]() {
-    // Led ON
-    digitalWrite(DEBUG_LED, LOW);
+    // Led OFF
+    digitalWrite(DEBUG_LED, HIGH);
     // Turn off the strip
     stripSetAllPixels(0);
     stripShow();
   });
   ArduinoOTA.onEnd([]() {
-    // Led Off
-    digitalWrite(DEBUG_LED, HIGH);
+    // Led On
+    digitalWrite(DEBUG_LED, LOW);
   });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
     //Serial.printf("Progress: %u%%\r", (progress / (total / 100)));

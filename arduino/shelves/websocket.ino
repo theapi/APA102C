@@ -21,10 +21,13 @@ void websocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
             break;
         case WStype_TEXT:
           //Serial.printf("[%u]: %s\n", num, payload);
-          if (payload[0] == '#') {
-             brightness = strtol((const char *) &payload[1], NULL, 16);
-             brightness_changed = 1;;
-          }
+          //if (payload[0] == '#') {
+            
+            //brightness = strtol((const char *) &payload[1], NULL, 16);
+            brightness = atoi((const char *)payload);
+            brightness_changed = 1;;
+            
+          //}
           break;
     }
 }

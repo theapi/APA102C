@@ -16,6 +16,7 @@ void webserverRoot() {
        String d = webserver.argName(i).substring(1);
        brightness = webserver.arg(i).toInt();
        brightness_changed = 1;
+       stripSetAllPixels(brightness);
     }
   }
 

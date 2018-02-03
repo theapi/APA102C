@@ -65,7 +65,7 @@ connection.onmessage = function (e) {
 
 <div class="slidecontainer">
 <h4>Brightness:</h4>  
-<input type="range" min="0" max="255" value="50" class="slider" id="brightness_range">
+<input type="range" min="0" max="700" value="50" class="slider" id="brightness_range">
 <p>Value: <span id="brightness_value"></span></p>
 </div>
 
@@ -78,14 +78,14 @@ output.innerHTML = slider.value;
 slider.oninput = function() {
   output.innerHTML = this.value;
 
-    var v = this.value;
-  if (v.length < 2) {
-    v = '0' + v; 
-  }
+  var v = this.value;
+//  if (v.length < 2) {
+//    v = '0' + v; 
+//  }
    
-  var val = '#'+v;    
-  console.log('Send: ' + val); 
-  connection.send(val);
+  //var val = '#'+v;    
+  console.log('Send: ' + v); 
+  connection.send(v);
 }
 
 </script>
